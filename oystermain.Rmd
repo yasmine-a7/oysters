@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 hi yasmine
 
+hello hello
+
 
 ## R Markdown
 
