@@ -1,0 +1,24 @@
+Population code,Population name,Location,Latitude,Longitude,Origin,Sample size
+SES,SeaSalter,"Sea Salter, UK",51.378,1.212,Hatchery,9
+B,Oban,"Oban, UK",55.534,−5.244,Hatchery,8
+BC,BC,"Vancouver, Canada",50.164,−124.432,Wild,12
+BE,Breast,"Brest, France",48.215,−4.462,Wild,10
+C,Plymouth,"Plymouth, UK",50.373,−3.441,Wild,9
+D,Cantambria,"Santoña, Spain",43.426,−3.543,Wild,8
+E,Texel,"Texel, Netherlands",53.001,4.474,Wild,10
+Guern,Guernsey,"Guernsey, UK",49.497,−2.502,Hatchery,10
+H,Faro,"Faro, Portugal",37.002,−7.583,Wild,9
+I,Gothenburg,"Kristineberg, Sweden",58.134,58.134,Wild,12
+IF,Ifremar,"Ifremer, France",48.351,−4.551,Hatchery,12
+JP,Japan,"Matsushima, Japan",38.367,141.066,Wild,12
+K,Italy,"Ravenna, Italy",44.402,12.122,Wild,10
+KL,Sylt,"Sylt, Germany",55.152,8.253,Wild,12
+L,Bangor,"Bangor, UK",53.098,−4.15,Hatchery,6
+LDK,Ldk,"Limfjorden, Denmark",56.833,8.906,Wild,11
+MAL,Maldon,"Maldon, UK",51.724,0.71,Hatchery,9
+N,Norway,"Arendal, Norway",58.428,8.793,Wild,11
+O,Oosterschelde,"Oosterschelde, Netherlands",51.608,3.91,Wild,12
+RH1,FrHat1,"Hatchery 1, France",na,na,Hatchery,10
+RH2,FrHat2,"Hatchery 2, France",na,na,Hatchery,10
+RH3,FrHat3,"Hatchery 3, France",na,na,Hatchery,10
+RH4,FrHat4,"Hatchery 4, France",na,na,Hatchery,10
