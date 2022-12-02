@@ -40,10 +40,15 @@ head(Samples_names)
 
 pop<-t(data.frame(strsplit(Samples_names, "_"))) # split names
 head(pop)
+data@pop<-as.factor(pop)
 
-Pop_ID<-paste(pop[,1],pop[,2],sep = "_") # vector with pops
+Pop_ID<-paste(pop[,1]) # vector with pops
 head(Pop_ID)
 data@pop<-as.factor(Pop_ID)
+
+#Pop_ID<-paste(pop[,1],pop[,2],sep = "_") # vector with pops
+#head(Pop_ID)
+#data@pop<-as.factor(Pop_ID)
 
 # PCA
 
@@ -180,5 +185,26 @@ head(Count)
 
 
 latlong<-read.table("oyster_meta_data.csv",sep = ",",header=T,dec=",") # load the latitute-longitude file csv
+
+colnames(latlong)[2]<-"Population"  #change column name to population
+
 Cluster_per_sites<-inner_join(latlong,Count,by="Population")
 head(Cluster_per_sites) # merge the two dataset by population
+
+xyz <- make.xyz(Cluster_per_sites$Longitude,
+                Cluster_per_sites$Latitude,
+                Cluster_per_sites$n,
+                Cluster_per_sites$group)
+
+#shapemap NEED to find world map 
+shape <- read.shapefile("data/Europe/europa1")
+
+##Format to plot the pie charts 
+##Map limit
+basemap(xlim=c(-5,5),ylim=c(45,53),bg="white")
+##Draw map 
+map<-draw.shape(shape, col="grey85")
+##Draw the camenbers 
+draw.pie(xyz$x, xyz$y, xyz$z, radius=0.25,
+         col=c("forestgreen","dodgerblue4","deeppink","orange2"))
+
