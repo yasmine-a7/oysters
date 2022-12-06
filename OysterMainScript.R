@@ -1,6 +1,6 @@
 ######################################
 ##### Oyster Project #####
-# Last edit 2/12/22 #
+# Last edit 6/12/22 #
 # Authurs: Yasmine, Jonna, and Alice #
 ######################################
 
@@ -261,10 +261,44 @@ shape <- read.shapefile("world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3")
 
 ##Format to plot the pie charts 
 ##Map limit
-basemap(xlim=c(-5,5),ylim=c(45,53),bg="white")
+basemap(xlim=c(-180,180),ylim=c(-90,90),bg="white")
 ##Draw map 
 map<-draw.shape(shape, col="grey85")
 ##Draw the camenbers 
-draw.pie(xyz$x, xyz$y, xyz$z, radius=0.25,
+draw.pie(xyz$x, xyz$y, xyz$z, radius=10,
          col=c("forestgreen","dodgerblue4","deeppink","orange2"))
+
+
+
+## Three plots Neutral
+
+par(mfrow=c(3,2))
+# is set the size for the first graphic
+par(fig=c(0,4,3,8)/8)
+#and plot it
+scatter(dapc, xax=1, yax=2, grp=dapc$grp, 
+        col=transp(c("forestgreen","dodgerblue4","deeppink","orange2")),
+        pch=19, bg="white",cstar = 0, cellipse = 1,clabel = 1,scree.da=FALSE,
+        scree.pca=FALSE)
+#plot(1,1)
+par(new=T)
+par(fig=c(4,8,3,8)/8)
+#plot(1,1)
+##Map limit
+basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
+##Draw map 
+map<-draw.shape(shape, col="grey85")
+##Draw map 
+draw.pie(xyz$x, xyz$y, xyz$z, radius = 1,
+         col=c("forestgreen","dodgerblue4","deeppink","orange2"))
+#then i set the size 
+par(new=T)
+par(fig=c(0,8,0,3)/8)
+#plot(1,1)
+str<-barplot(t(qmatrix.neutral), col=c("deeppink","forestgreen","orange2","dodgerblue4"), 
+             border=NA, space=0, 
+             xlab="Individuals", 
+             ylab = "Ancestry")
+abline(v=111,lty=2,lwd=2)
+abline(v=127,lty=2,lwd=2)
 
