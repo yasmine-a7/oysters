@@ -126,7 +126,7 @@ add.scatter.eig(pca.oysteroutlier$eig[1:50],3,1,2, ratio=.3)
 
 # DAPC outliers
 
-grp<-find.clusters(dataoutlier, n.pca=50, max.n=18,scale=FALSE) # find clusters
+grp<-find.clusters(dataoutlier, n.pca=50, max.n=18,scale=FALSE) # find clusters - 3
 
 dapc<-dapc(dataoutlier, pop=grp$grp, n.pca=50)
 dapc$posterior
@@ -162,14 +162,67 @@ scatter(dapc, xax=1, yax=2, grp=dapc$grp,
 
 ######################
 
-# LEA Neutral
+# LEA Outlier
 
-genofile<-
+dataoutlier.heirf<- genind2hierfstat(dataoutlier)
+write.struct(dataoutlier.heirf, ilab=indNames(dataoutlier), pop=pop(dataoutlier), fname="dataoutlier.str")
 
-project <- snmf(dataneutral,K = 2:18,entropy = TRUE,
+struct2geno(input.file="dataoutlier.str", ploidy=2, FORMAT=2, extra.column=2, extra.row=0)
+
+genofile.outlier<- "dataoutlier.str.geno"
+
+
+project <- snmf(genofile.outlier,K = 2:18,entropy = TRUE,
                 repetitions = 2,
                 project = "new")
 plot(project, col = transp("steelblue4"), pch = 19)
+
+#calculate the ancestry of each individuals for K=3
+cic.snmf <- snmf(genofile.outlier, K=3, project="new")
+#extract the probability matrice for K=3
+qmatrix <- Q(cic.snmf, K=3)
+
+#plot this probability matrice 
+barplot(t(qmatrix), 
+        col=c("deeppink","forestgreen","orange2"), 
+        border=NA, space=0, 
+        xlab="Individuals", 
+        ylab = "Ancestry")
+abline(v=111,lty=2,lwd=2)
+abline(v=127,lty=2,lwd=2)
+
+
+# LEA Neutral
+
+dataneutral.heirf<- genind2hierfstat(dataneutral)
+write.struct(dataneutral.heirf, ilab=indNames(dataneutral), pop=pop(dataneutral), fname="dataneutral.str")
+
+struct2geno(input.file="dataneutral.str", ploidy=2, FORMAT=2, extra.column=2, extra.row=0)
+
+genofile.neutral<- "dataneutral.str.geno"
+
+
+project.neutral <- snmf(genofile.neutral,K = 2:18,entropy = TRUE,
+                repetitions = 2,
+                project = "new")
+plot(project.neutral, col = transp("steelblue4"), pch = 19)
+
+#calculate the ancestry of each individuals for K=4
+cic.snmf.neutral <- snmf(genofile.neutral, K=4, project="new")
+#extract the probability matrice for K=4
+qmatrix.neutral <- Q(cic.snmf.neutral, K=4)
+
+#plot this probability matrice 
+barplot(t(qmatrix.neutral), 
+        col=c("deeppink","forestgreen","orange2", "dodgerblue4"), 
+        border=NA, space=0, 
+        xlab="Individuals", 
+        ylab = "Ancestry")
+abline(v=111,lty=2,lwd=2)
+abline(v=127,lty=2,lwd=2)
+
+
+
 
 
 ######################
@@ -196,8 +249,15 @@ xyz <- make.xyz(Cluster_per_sites$Longitude,
                 Cluster_per_sites$n,
                 Cluster_per_sites$group)
 
-#shapemap NEED to find world map 
-shape <- read.shapefile("data/Europe/europa1")
+
+
+
+#shapemap
+
+download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip" , destfile="world_shape_file.zip")
+
+shape <- read.shapefile("world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3")
+
 
 ##Format to plot the pie charts 
 ##Map limit
