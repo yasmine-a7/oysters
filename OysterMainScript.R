@@ -385,6 +385,20 @@ str<-barplot(t(qmatrix), names.arg=1:232,
 ###################################################################
 ###################################################################
 
+#FST Pairwise 
 
+wc(dataneutral)
 
+basic.stats(dataneutral)
 
+# First we convert the genind file to a format that works with hierfstat
+outlier_dat <- genind2hierfstat(dataneutral)
+
+matFst <- pairwise.WCfst(dataneutral)
+
+# Here we replace all the NA values with 0 for easier plotting
+matFst <- matFst %>% 
+  replace(., is.na(.), 0)
+
+#Pop pairwise graph
+table.paint(matFst, col.labels=Population(dataneutral), clegend = 0.8, csize = 0.8)
