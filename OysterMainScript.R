@@ -126,11 +126,15 @@ add.scatter.eig(pca.oysteroutlier$eig[1:50],3,1,2, ratio=.3)
 
 # DAPC outliers
 
+par(mfrow=c(1,1))
+
+set.seed(100)
 grp<-find.clusters(dataoutlier, n.pca=50, max.n=18,scale=FALSE) # find clusters - 3
 
 dapc<-dapc(dataoutlier, pop=grp$grp, n.pca=50)
 dapc$posterior
 
+set.seed(100)
 scatter(dapc, xax=1, yax=2, grp=dapc$grp, 
         col=transp(c("forestgreen","dodgerblue4","deeppink","orange2")),
         pch=19, bg="white",cstar = 0, cellipse = 1,clabel = 1,scree.da=FALSE,
@@ -150,7 +154,8 @@ add.scatter.eig(pca.oysterneutral$eig[1:50],3,1,2, ratio=.3)
 
 # DAPC neutral
 
-grp<-find.clusters(dataneutral, n.pca=50, max.n=18,scale=FALSE) # find clusters
+set.seed(100)
+grp<-find.clusters(dataneutral, n.pca=50, max.n=18,scale=FALSE) # find clusters 4
 
 dapc<-dapc(dataneutral, pop=grp$grp, n.pca=50)
 dapc$posterior
@@ -178,18 +183,18 @@ project <- snmf(genofile.outlier,K = 2:18,entropy = TRUE,
 plot(project, col = transp("steelblue4"), pch = 19)
 
 #calculate the ancestry of each individuals for K=3
+set.seed(100)
 cic.snmf <- snmf(genofile.outlier, K=3, project="new")
 #extract the probability matrice for K=3
 qmatrix <- Q(cic.snmf, K=3)
 
 #plot this probability matrice 
-barplot(t(qmatrix), 
-        col=c("deeppink","forestgreen","orange2"), 
+barplot(t(qmatrix), names.arg=1:232,
+        col=c("forestgreen","dodgerblue4","deeppink"), 
         border=NA, space=0, 
         xlab="Individuals", 
         ylab = "Ancestry")
-abline(v=111,lty=2,lwd=2)
-abline(v=127,lty=2,lwd=2)
+
 
 
 # LEA Neutral
@@ -208,18 +213,16 @@ project.neutral <- snmf(genofile.neutral,K = 2:18,entropy = TRUE,
 plot(project.neutral, col = transp("steelblue4"), pch = 19)
 
 #calculate the ancestry of each individuals for K=4
-cic.snmf.neutral <- snmf(genofile.neutral, K=4, project="new")
+# DONT RERUN # cic.snmf.neutral <- snmf(genofile.neutral, K=4, project="new")
 #extract the probability matrice for K=4
-qmatrix.neutral <- Q(cic.snmf.neutral, K=4)
+# DONT RERUN # qmatrix.neutral <- Q(cic.snmf.neutral, K=4)
 
 #plot this probability matrice 
-barplot(t(qmatrix.neutral), 
-        col=c("deeppink","forestgreen","orange2", "dodgerblue4"), 
+barplot(t(qmatrix.neutral), names.arg=1:232, 
+        col=c("deeppink", "dodgerblue4", "forestgreen", "orange2"), 
         border=NA, space=0, 
         xlab="Individuals", 
         ylab = "Ancestry")
-abline(v=111,lty=2,lwd=2)
-abline(v=127,lty=2,lwd=2)
 
 
 
@@ -261,13 +264,59 @@ shape <- read.shapefile("world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3")
 
 ##Format to plot the pie charts 
 ##Map limit
+basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
+##Draw map 
+map<-draw.shape(shape, col="grey85")
+##Draw the camenbers 
+draw.pie(xyz$x, xyz$y, xyz$z, radius=1,
+         col=c("forestgreen","dodgerblue4","deeppink","orange2"))
+
+
+## Map outlier
+
+data2<-data.frame(cbind(Pop_ID,grp$grp))
+colnames(data2)<-c("Population","group")
+Count<-data.frame(data2 %>% 
+                    group_by(Population,group) %>%
+                    summarise(n=n()))
+head(Count)
+
+
+latlong<-read.table("oyster_meta_data.csv",sep = ",",header=T,dec=",") # load the latitute-longitude file csv
+
+colnames(latlong)[2]<-"Population"  #change column name to population
+
+Cluster_per_sites<-inner_join(latlong,Count,by="Population")
+head(Cluster_per_sites) # merge the two dataset by population
+
+xyz <- make.xyz(Cluster_per_sites$Longitude,
+                Cluster_per_sites$Latitude,
+                Cluster_per_sites$n,
+                Cluster_per_sites$group)
+
+
+
+
+#shapemap
+
+download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.zip" , destfile="world_shape_file.zip")
+
+shape <- read.shapefile("world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3")
+
+
+##Format to plot the pie charts 
+##Map limit
 basemap(xlim=c(-180,180),ylim=c(-90,90),bg="white")
 ##Draw map 
 map<-draw.shape(shape, col="grey85")
 ##Draw the camenbers 
-draw.pie(xyz$x, xyz$y, xyz$z, radius=10,
-         col=c("forestgreen","dodgerblue4","deeppink","orange2"))
+draw.pie(xyz$x, xyz$y, xyz$z, radius=5,
+         col=c("forestgreen","dodgerblue4","deeppink"))
 
+
+
+
+############################
 
 
 ## Three plots Neutral
@@ -295,10 +344,47 @@ draw.pie(xyz$x, xyz$y, xyz$z, radius = 1,
 par(new=T)
 par(fig=c(0,8,0,3)/8)
 #plot(1,1)
-str<-barplot(t(qmatrix.neutral), col=c("deeppink","forestgreen","orange2","dodgerblue4"), 
+str<-barplot(t(qmatrix.neutral), col=c("deeppink", "dodgerblue4", "forestgreen", "orange2"), 
              border=NA, space=0, 
              xlab="Individuals", 
              ylab = "Ancestry")
-abline(v=111,lty=2,lwd=2)
-abline(v=127,lty=2,lwd=2)
+
+
+## Tree plots outlier
+
+par(mfrow=c(3,2))
+# is set the size for the first graphic
+par(fig=c(0,4,3,8)/8)
+#and plot it
+scatter(dapc, xax=1, yax=2, grp=dapc$grp, 
+        col=transp(c("forestgreen","dodgerblue4","deeppink")),
+        pch=19, bg="white",cstar = 0, cellipse = 1,clabel = 1,scree.da=FALSE,
+        scree.pca=FALSE)
+#plot(1,1)
+par(new=T)
+par(fig=c(4,8,3,8)/8)
+#plot(1,1)
+##Map limit
+basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
+##Draw map 
+map<-draw.shape(shape, col="grey85")
+##Draw map 
+draw.pie(xyz$x, xyz$y, xyz$z, radius = 1,
+         col=c("forestgreen","dodgerblue4","deeppink"))
+#then i set the size 
+par(new=T)
+par(fig=c(0,8,0,3)/8)
+#plot(1,1)
+str<-barplot(t(qmatrix), names.arg=1:232,
+             col=c("forestgreen","dodgerblue4","deeppink"), 
+             border=NA, space=0, 
+             xlab="Individuals", 
+             ylab = "Ancestry")
+
+
+###################################################################
+###################################################################
+
+
+
 
