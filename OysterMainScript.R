@@ -161,7 +161,7 @@ dapc<-dapc(dataneutral, pop=grp$grp, n.pca=50)
 dapc$posterior
 
 scatter(dapc, xax=1, yax=2, grp=dapc$grp, 
-        col=transp(c("forestgreen", "dodgerblue4", "deeppink", "orange2")),
+        col=transp(c("red", "darkorchid", "cadetblue2", "orange")),
         pch=19, bg="white",cstar = 0, cellipse = 1,clabel = 1,scree.da=FALSE,
         scree.pca=FALSE)
 
@@ -268,7 +268,7 @@ par(mfrow=c(1,1))
 par(mar=c(9, 3, 0.7, 0.7))
 
 barplot(t(qmatrix.neutral),
-        col=c("orange2", "forestgreen", "deeppink", "dodgerblue4"), 
+        col=c("orange", "red", "cadetblue2", "darkorchid"), 
         border=NA, space=0,
         ylab = "Ancestry")
 abline(v=9, lty=2, lwd=2)
@@ -347,7 +347,7 @@ download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.z
 
 shape <- read.shapefile("world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3")
 
-
+##Map neutral
 ##Format to plot the pie charts 
 ##Map limit
 basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
@@ -355,7 +355,7 @@ basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
 map<-draw.shape(shape, col="grey85")
 ##Draw the camenbers 
 draw.pie(xyz$x, xyz$y, xyz$z, radius=1,
-         col=c("forestgreen", "dodgerblue4", "deeppink", "orange2"))
+         col=c("red", "darkorchid", "cadetblue2", "orange"))
 
 
 ## Map outlier
@@ -392,7 +392,23 @@ shape <- read.shapefile("world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3")
 
 ##Format to plot the pie charts 
 ##Map limit
-basemap(xlim=c(-180,180),ylim=c(-90,90),bg="white")
+par(mfrow=c(1,1))
+#europe save 700X700
+basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
+map<-draw.shape(shape, col="grey85") 
+draw.pie(xyz$x, xyz$y, xyz$z, radius=1.5,
+         col=c("forestgreen","dodgerblue4","deeppink"))
+#Japan
+basemap(xlim=c(125,130),ylim=c(30,50),bg="white") 
+map<-draw.shape(shape, col="grey85")
+draw.pie(xyz$x, xyz$y, xyz$z, radius=2,
+         col=c("forestgreen","dodgerblue4","deeppink"))
+#canada
+basemap(xlim=c(-140,-125),ylim=c(40,70),bg="white") 
+map<-draw.shape(shape, col="grey85")
+draw.pie(xyz$x, xyz$y, xyz$z, radius=3,
+         col=c("forestgreen","dodgerblue4","deeppink")) 
+
 ##Draw map 
 map<-draw.shape(shape, col="grey85")
 ##Draw the camenbers 
