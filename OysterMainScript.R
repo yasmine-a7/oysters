@@ -161,7 +161,7 @@ dapc<-dapc(dataneutral, pop=grp$grp, n.pca=50)
 dapc$posterior
 
 scatter(dapc, xax=1, yax=2, grp=dapc$grp, 
-        col=transp(c("forestgreen","dodgerblue4","deeppink","orange2")),
+        col=transp(c("forestgreen", "dodgerblue4", "deeppink", "orange2")),
         pch=19, bg="white",cstar = 0, cellipse = 1,clabel = 1,scree.da=FALSE,
         scree.pca=FALSE)
 
@@ -189,12 +189,56 @@ cic.snmf <- snmf(genofile.outlier, K=3, project="new")
 qmatrix <- Q(cic.snmf, K=3)
 
 #plot this probability matrice 
-barplot(t(qmatrix), names.arg=1:232,
-        col=c("forestgreen","dodgerblue4","deeppink"), 
-        border=NA, space=0, 
-        xlab="Individuals", 
-        ylab = "Ancestry")
 
+par(mfrow=c(1,1))
+par(mar=c(9, 3, 0.7, 0.7))
+
+barplot(t(qmatrix),
+        col=c("forestgreen","dodgerblue4","deeppink"), 
+        border=NA, space=0, xlab=NA,
+        ylab = "Ancestry")
+abline(v=9, lty=2, lwd=2)
+abline(v=17, lty=2, lwd=2)
+abline(v=29, lty=2, lwd=2)
+abline(v=39, lty=2, lwd=2)
+abline(v=48, lty=2, lwd=2)
+abline(v=56, lty=2, lwd=2)
+abline(v=66, lty=2, lwd=2)
+abline(v=76, lty=2, lwd=2)
+abline(v=85, lty=2, lwd=2)
+abline(v=96, lty=2, lwd=2)
+abline(v=108, lty=2, lwd=2)
+abline(v=120, lty=2, lwd=2)
+abline(v=130, lty=2, lwd=2)
+abline(v=142, lty=2, lwd=2)
+abline(v=148, lty=2, lwd=2)
+abline(v=159, lty=2, lwd=2)
+abline(v=168, lty=2, lwd=2)
+abline(v=179, lty=2, lwd=2)
+abline(v=191, lty=2, lwd=2)
+abline(v=201, lty=2, lwd=2)
+abline(v=211, lty=2, lwd=2)
+abline(v=221, lty=2, lwd=2)
+text(x=5,y=-0.2,cex=1.2, srt=90, "SeaSalter UK", xpd=NA)
+text(x=13,y=-0.2,cex=1.2, srt=90, "Oban UK", xpd=NA)
+text(x=23,y=-0.2,cex=1.2, srt=90, "Canada", xpd=NA)
+text(x=35,y=-0.2,cex=1.2, srt=90, "Brest FR", xpd=NA)
+text(x=45,y=-0.2,cex=1.2, srt=90, "Plymouth UK", xpd=NA)
+text(x=53,y=-0.2,cex=1.2, srt=90, "Spain", xpd=NA)
+text(x=62,y=-0.2,cex=1.2, srt=90, "Texel NL", xpd=NA)
+text(x=71,y=-0.2,cex=1.2, srt=90, "Guernsey UK", xpd=NA)
+text(x=80,y=-0.2,cex=1.2, srt=90, "Faro", xpd=NA)
+text(x=91,y=-0.2,cex=1.2, srt=90, "Gothenburg", xpd=NA)
+text(x=103,y=-0.2,cex=1.2, srt=90, "Ifremer FR", xpd=NA)
+text(x=114,y=-0.2,cex=1.2, srt=90, "Japan", xpd=NA)
+text(x=125,y=-0.2,cex=1.2, srt=90, "Italy", xpd=NA)
+text(x=137,y=-0.2,cex=1.2, srt=90, "Sylt DE", xpd=NA)
+text(x=146,y=-0.2,cex=1.2, srt=90, "Bangor UK", xpd=NA)
+text(x=155,y=-0.2,cex=1.2, srt=90, "Denmark", xpd=NA)
+text(x=166,y=-0.2,cex=1.2, srt=90, "Maldon UK", xpd=NA)
+text(x=175,y=-0.2,cex=1.2, srt=90, "Norway", xpd=NA)
+text(x=186,y=-0.2,cex=1.2, srt=90, "Oosterschelde NL", xpd=NA)
+text(x=210,y=-0.2,cex=1.2, "France hatcheries", xpd=NA)
 
 
 # LEA Neutral
@@ -213,20 +257,62 @@ project.neutral <- snmf(genofile.neutral,K = 2:18,entropy = TRUE,
 plot(project.neutral, col = transp("steelblue4"), pch = 19)
 
 #calculate the ancestry of each individuals for K=4
-# DONT RERUN # cic.snmf.neutral <- snmf(genofile.neutral, K=4, project="new")
+set.seed(100)
+cic.snmf.neutral <- snmf(genofile.neutral, K=4, project="new")
 #extract the probability matrice for K=4
-# DONT RERUN # qmatrix.neutral <- Q(cic.snmf.neutral, K=4)
+qmatrix.neutral <- Q(cic.snmf.neutral, K=4)
 
 #plot this probability matrice 
-barplot(t(qmatrix.neutral), names.arg=1:232, 
-        col=c("deeppink", "dodgerblue4", "forestgreen", "orange2"), 
-        border=NA, space=0, 
-        xlab="Individuals", 
+
+par(mfrow=c(1,1))
+par(mar=c(9, 3, 0.7, 0.7))
+
+barplot(t(qmatrix.neutral),
+        col=c("orange2", "forestgreen", "deeppink", "dodgerblue4"), 
+        border=NA, space=0,
         ylab = "Ancestry")
-
-
-
-
+abline(v=9, lty=2, lwd=2)
+abline(v=17, lty=2, lwd=2)
+abline(v=29, lty=2, lwd=2)
+abline(v=39, lty=2, lwd=2)
+abline(v=48, lty=2, lwd=2)
+abline(v=56, lty=2, lwd=2)
+abline(v=66, lty=2, lwd=2)
+abline(v=76, lty=2, lwd=2)
+abline(v=85, lty=2, lwd=2)
+abline(v=96, lty=2, lwd=2)
+abline(v=108, lty=2, lwd=2)
+abline(v=120, lty=2, lwd=2)
+abline(v=130, lty=2, lwd=2)
+abline(v=142, lty=2, lwd=2)
+abline(v=148, lty=2, lwd=2)
+abline(v=159, lty=2, lwd=2)
+abline(v=168, lty=2, lwd=2)
+abline(v=179, lty=2, lwd=2)
+abline(v=191, lty=2, lwd=2)
+abline(v=201, lty=2, lwd=2)
+abline(v=211, lty=2, lwd=2)
+abline(v=221, lty=2, lwd=2)
+text(x=5,y=-0.2,cex=1.2, srt=90, "SeaSalter UK", xpd=NA)
+text(x=13,y=-0.2,cex=1.2, srt=90, "Oban UK", xpd=NA)
+text(x=23,y=-0.2,cex=1.2, srt=90, "Canada", xpd=NA)
+text(x=35,y=-0.2,cex=1.2, srt=90, "Brest FR", xpd=NA)
+text(x=45,y=-0.2,cex=1.2, srt=90, "Plymouth UK", xpd=NA)
+text(x=53,y=-0.2,cex=1.2, srt=90, "Spain", xpd=NA)
+text(x=62,y=-0.2,cex=1.2, srt=90, "Texel NL", xpd=NA)
+text(x=71,y=-0.2,cex=1.2, srt=90, "Guernsey UK", xpd=NA)
+text(x=80,y=-0.2,cex=1.2, srt=90, "Faro", xpd=NA)
+text(x=91,y=-0.2,cex=1.2, srt=90, "Gothenburg", xpd=NA)
+text(x=103,y=-0.2,cex=1.2, srt=90, "Ifremer FR", xpd=NA)
+text(x=114,y=-0.2,cex=1.2, srt=90, "Japan", xpd=NA)
+text(x=125,y=-0.2,cex=1.2, srt=90, "Italy", xpd=NA)
+text(x=137,y=-0.2,cex=1.2, srt=90, "Sylt DE", xpd=NA)
+text(x=146,y=-0.2,cex=1.2, srt=90, "Bangor UK", xpd=NA)
+text(x=155,y=-0.2,cex=1.2, srt=90, "Denmark", xpd=NA)
+text(x=166,y=-0.2,cex=1.2, srt=90, "Maldon UK", xpd=NA)
+text(x=175,y=-0.2,cex=1.2, srt=90, "Norway", xpd=NA)
+text(x=186,y=-0.2,cex=1.2, srt=90, "Oosterschelde NL", xpd=NA)
+text(x=210,y=-0.2,cex=1.2, "France hatcheries", xpd=NA)
 
 ######################
 
@@ -269,7 +355,7 @@ basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
 map<-draw.shape(shape, col="grey85")
 ##Draw the camenbers 
 draw.pie(xyz$x, xyz$y, xyz$z, radius=1,
-         col=c("forestgreen","dodgerblue4","deeppink","orange2"))
+         col=c("forestgreen", "dodgerblue4", "deeppink", "orange2"))
 
 
 ## Map outlier
@@ -326,7 +412,7 @@ par(mfrow=c(3,2))
 par(fig=c(0,4,3,8)/8)
 #and plot it
 scatter(dapc, xax=1, yax=2, grp=dapc$grp, 
-        col=transp(c("forestgreen","dodgerblue4","deeppink","orange2")),
+        col=transp(c("forestgreen", "dodgerblue4", "deeppink", "orange2")),
         pch=19, bg="white",cstar = 0, cellipse = 1,clabel = 1,scree.da=FALSE,
         scree.pca=FALSE)
 #plot(1,1)
@@ -339,12 +425,12 @@ basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
 map<-draw.shape(shape, col="grey85")
 ##Draw map 
 draw.pie(xyz$x, xyz$y, xyz$z, radius = 1,
-         col=c("forestgreen","dodgerblue4","deeppink","orange2"))
+         col=c("forestgreen", "dodgerblue4", "deeppink", "orange2"))
 #then i set the size 
 par(new=T)
 par(fig=c(0,8,0,3)/8)
 #plot(1,1)
-str<-barplot(t(qmatrix.neutral), col=c("deeppink", "dodgerblue4", "forestgreen", "orange2"), 
+str<-barplot(t(qmatrix.neutral), col=c("orange2", "forestgreen", "deeppink", "dodgerblue4"), 
              border=NA, space=0, 
              xlab="Individuals", 
              ylab = "Ancestry")
@@ -387,14 +473,14 @@ str<-barplot(t(qmatrix), names.arg=1:232,
 
 #FST Pairwise 
 
-wc(dataneutral)
+wc(dataoutlier)
 
-basic.stats(dataneutral)
+basic.stats(dataoutlier)
 
 # First we convert the genind file to a format that works with hierfstat
-outlier_dat <- genind2hierfstat(dataneutral)
+outlier_dat <- genind2hierfstat(dataoutlier)
 
-matFst <- pairwise.WCfst(dataneutral)
+matFst <- pairwise.WCfst(outlier_dat)
 
 # Here we replace all the NA values with 0 for easier plotting
 matFst <- matFst %>% 
