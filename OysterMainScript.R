@@ -104,7 +104,7 @@ ggplot(stat,aes(Ht,Fst))+ geom_point(color=c("grey55"),alpha=0.3) +
   theme_bw() 
 
 
-# Outlier PCA
+# Seperating outlier and neutral loci into new datasets
 
 # heirfstat changed loci names with - to . so...
 data[loc=outliers$locus]
@@ -117,12 +117,17 @@ dataoutlier<- data[loc=outlierframe$loc1]
 neutralframe <- subset(locframe, !locframe$loc2 %in% outliers$locus)
 dataneutral<- data[loc=neutralframe$loc1] 
 
+##########
 
+##Outlier PCA 
 x.oysteroutlier <- tab(dataoutlier, freq=TRUE, NA.method="mean")
+#select 5 # of axes
 pca.oysteroutlier <- dudi.pca(x.oysteroutlier, center=TRUE, scale=FALSE)
 
-s.class(pca.oysteroutlier$li, fac=pop(dataoutlier), col=transp(funky(15),.6), axesel=FALSE, cstar=0, cpoint=3, clabel = 0.5)
+s.class(pca.oysteroutlier$li, fac=pop(dataoutlier), col=transp(funky(25),.6), axesel=FALSE, cstar=0, cpoint=2, clabel = 0.5)
+
 add.scatter.eig(pca.oysteroutlier$eig[1:50],3,1,2, ratio=.3)
+
 
 # DAPC outliers
 
@@ -149,7 +154,7 @@ scatter(dapc, xax=1, yax=2, grp=dapc$grp,
 x.oysterneutral <- tab(dataneutral, freq=TRUE, NA.method="mean")
 pca.oysterneutral <- dudi.pca(x.oysterneutral, center=TRUE, scale=FALSE)
 
-s.class(pca.oysterneutral$li, fac=pop(dataneutral), col=transp(funky(15),.6), axesel=FALSE, cstar=0, cpoint=3, clabel = 0.5)
+s.class(pca.oysterneutral$li, fac=pop(dataneutral), col=transp(funky(25),.6), axesel=FALSE, cstar=0, cpoint=3, clabel = 0.5)
 add.scatter.eig(pca.oysterneutral$eig[1:50],3,1,2, ratio=.3)
 
 # DAPC neutral
@@ -316,7 +321,7 @@ text(x=210,y=-0.2,cex=1.2, "France hatcheries", xpd=NA)
 
 ######################
 
-# Map neutral
+# MAP!!!
 
 data2<-data.frame(cbind(Pop_ID,grp$grp))
 colnames(data2)<-c("Population","group")
@@ -347,18 +352,27 @@ download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.z
 
 shape <- read.shapefile("world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3")
 
-##Map neutral
+##Map NEUTRAL
 ##Format to plot the pie charts 
 ##Map limit
+#europe save 700X700
 basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
-##Draw map 
+map<-draw.shape(shape, col="grey85") 
+draw.pie(xyz$x, xyz$y, xyz$z, radius=1.5,
+         col=c("red", "darkorchid", "cadetblue2", "orange"))
+#Japan
+basemap(xlim=c(125,130),ylim=c(30,50),bg="white") 
 map<-draw.shape(shape, col="grey85")
-##Draw the camenbers 
-draw.pie(xyz$x, xyz$y, xyz$z, radius=1,
+draw.pie(xyz$x, xyz$y, xyz$z, radius=2,
+         col=c("red", "darkorchid", "cadetblue2", "orange"))
+#canada
+basemap(xlim=c(-140,-125),ylim=c(40,70),bg="white") 
+map<-draw.shape(shape, col="grey85")
+draw.pie(xyz$x, xyz$y, xyz$z, radius=3,
          col=c("red", "darkorchid", "cadetblue2", "orange"))
 
 
-## Map outlier
+## Map OUTLIER
 
 data2<-data.frame(cbind(Pop_ID,grp$grp))
 colnames(data2)<-c("Population","group")
@@ -440,8 +454,8 @@ basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
 ##Draw map 
 map<-draw.shape(shape, col="grey85")
 ##Draw map 
-draw.pie(xyz$x, xyz$y, xyz$z, radius = 1,
-         col=c("forestgreen", "dodgerblue4", "deeppink", "orange2"))
+draw.pie(xyz$x, xyz$y, xyz$z, radius=1.5,
+         col=c("red", "darkorchid", "cadetblue2", "orange"))
 #then i set the size 
 par(new=T)
 par(fig=c(0,8,0,3)/8)
@@ -487,11 +501,11 @@ str<-barplot(t(qmatrix), names.arg=1:232,
 ###################################################################
 ###################################################################
 
-#FST Pairwise 
+#FST Pairwise OUTLIER  
 
-wc(dataoutlier)
+wc(dataneutral)
 
-basic.stats(dataoutlier)
+basic.stats(dataneutral)
 
 # First we convert the genind file to a format that works with hierfstat
 outlier_dat <- genind2hierfstat(dataoutlier)
@@ -502,5 +516,32 @@ matFst <- pairwise.WCfst(outlier_dat)
 matFst <- matFst %>% 
   replace(., is.na(.), 0)
 
+#Create label
+poplabel <- c("Bangor", "BC", "Brest", "cantambria", "Faro", "FrHat1", "FrHat2", "FrHat3", "FrHat4", "Gothenburg", "Guernsey", "Ifremar", "Italy", "Japan", "Ldk", "Maldon", "Norway", "Oban", "Oosterschelde", "Plymouth", "SeaSalter", "Sylt", "Texel")
+
 #Pop pairwise graph
-table.paint(matFst, col.labels=Population(dataneutral), clegend = 0.8, csize = 0.8)
+table.paint(matFst, col.labels=poplabel, clegend = 0.8, csize = 0.8)
+
+#FST Pairwise NEUTRAL
+
+wc(dataneutral)
+
+basic.stats(dataneutral)
+
+# First we convert the genind file to a format that works with hierfstat
+neutral_dat <- genind2hierfstat(dataneutral)
+
+matFst <- pairwise.WCfst(neutral_dat)
+
+# Here we replace all the NA values with 0 for easier plotting
+matFst <- matFst %>% 
+  replace(., is.na(.), 0)
+
+#Create label
+poplabel <- c("Bangor", "BC", "Brest", "cantambria", "Faro", "FrHat1", "FrHat2", "FrHat3", "FrHat4", "Gothenburg", "Guernsey", "Ifremar", "Italy", "Japan", "Ldk", "Maldon", "Norway", "Oban", "Oosterschelde", "Plymouth", "SeaSalter", "Sylt", "Texel")
+
+#Pop pairwise graph
+table.paint(matFst, col.labels=poplabel, clegend = 0.8, csize = 0.8)
+
+#pop(dataneutral) 
+
