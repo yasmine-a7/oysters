@@ -128,6 +128,9 @@ s.class(pca.oysteroutlier$li, fac=pop(dataoutlier), col=transp(funky(25),.6), ax
 
 add.scatter.eig(pca.oysteroutlier$eig[1:50],3,1,2, ratio=.3)
 
+#variance explained by each axes
+eig.perc.outlier <- 100*pca.oysteroutlier$eig/sum(pca.oysteroutlier$eig)
+head(eig.perc.outlier)
 
 # DAPC outliers
 
@@ -156,6 +159,10 @@ pca.oysterneutral <- dudi.pca(x.oysterneutral, center=TRUE, scale=FALSE)
 
 s.class(pca.oysterneutral$li, fac=pop(dataneutral), col=transp(funky(25),.6), axesel=FALSE, cstar=0, cpoint=3, clabel = 0.5)
 add.scatter.eig(pca.oysterneutral$eig[1:50],3,1,2, ratio=.3)
+
+#variance explained by each axes
+eig.perc.neutral <- 100*pca.oysterneutral$eig/sum(pca.oysterneutral$eig)
+head(eig.perc.neutral)
 
 # DAPC neutral
 
