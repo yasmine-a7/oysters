@@ -50,7 +50,8 @@ data@pop<-as.factor(Pop_ID)
 #head(Pop_ID)
 #data@pop<-as.factor(Pop_ID)
 
-# PCA
+
+# PCA All loci
 
 x.oyster <- tab(data, freq=TRUE, NA.method="mean")
 pca.oyster <- dudi.pca(x.oyster, center=TRUE, scale=FALSE)
@@ -61,7 +62,7 @@ s.class(pca.oyster$li, fac=pop(data), col=transp(funky(15),.6), axesel=FALSE, cs
 add.scatter.eig(pca.oyster$eig[1:50],3,1,2, ratio=.3)
 
 
-# DAPC
+# DAPC All loci
 
 grp<-find.clusters(data, n.pca=50, max.n=18,scale=FALSE) # find clusters
 
@@ -106,20 +107,20 @@ ggplot(stat,aes(Ht,Fst))+ geom_point(color=c("grey55"),alpha=0.3) +
 
 # Seperating outlier and neutral loci into new datasets
 
-# heirfstat changed loci names with - to . so...
+## heirfstat changed loci names with - to . so...
 data[loc=outliers$locus]
 locNames(data)
 locframe <- data.frame(loc1=locNames(data),loc2=rownames(stat)) # created loci frame with . and - comparison
 outlierframe <- subset(locframe, locframe$loc2 %in% outliers$locus) # subset previous frame by outliers
-# Data with just the outliers
+## Data with just the outliers
 dataoutlier<- data[loc=outlierframe$loc1] 
-# Data with just neutral
+## Data with just neutral
 neutralframe <- subset(locframe, !locframe$loc2 %in% outliers$locus)
 dataneutral<- data[loc=neutralframe$loc1] 
 
 ##########
 
-##Outlier PCA 
+# Outlier PCA 
 x.oysteroutlier <- tab(dataoutlier, freq=TRUE, NA.method="mean")
 #select 5 # of axes
 pca.oysteroutlier <- dudi.pca(x.oysteroutlier, center=TRUE, scale=FALSE)
@@ -128,7 +129,7 @@ s.class(pca.oysteroutlier$li, fac=pop(dataoutlier), col=transp(funky(25),.6), ax
 
 add.scatter.eig(pca.oysteroutlier$eig[1:50],3,1,2, ratio=.3)
 
-#variance explained by each axes
+## variance explained by each axes
 eig.perc.outlier <- 100*pca.oysteroutlier$eig/sum(pca.oysteroutlier$eig)
 head(eig.perc.outlier)
 
@@ -160,7 +161,7 @@ pca.oysterneutral <- dudi.pca(x.oysterneutral, center=TRUE, scale=FALSE)
 s.class(pca.oysterneutral$li, fac=pop(dataneutral), col=transp(funky(25),.6), axesel=FALSE, cstar=0, cpoint=3, clabel = 0.5)
 add.scatter.eig(pca.oysterneutral$eig[1:50],3,1,2, ratio=.3)
 
-#variance explained by each axes
+## variance explained by each axes
 eig.perc.neutral <- 100*pca.oysterneutral$eig/sum(pca.oysterneutral$eig)
 head(eig.perc.neutral)
 
@@ -194,13 +195,13 @@ project <- snmf(genofile.outlier,K = 2:18,entropy = TRUE,
                 project = "new")
 plot(project, col = transp("steelblue4"), pch = 19)
 
-#calculate the ancestry of each individuals for K=3
+## calculate the ancestry of each individuals for K=3
 set.seed(100)
 cic.snmf <- snmf(genofile.outlier, K=3, project="new")
-#extract the probability matrice for K=3
+## extract the probability matrice for K=3
 qmatrix <- Q(cic.snmf, K=3)
 
-#plot this probability matrice 
+## plot this probability matrice 
 
 par(mfrow=c(1,1))
 par(mar=c(9, 3, 0.7, 0.7))
@@ -268,13 +269,13 @@ project.neutral <- snmf(genofile.neutral,K = 2:18,entropy = TRUE,
                 project = "new")
 plot(project.neutral, col = transp("steelblue4"), pch = 19)
 
-#calculate the ancestry of each individuals for K=4
+## calculate the ancestry of each individuals for K=4
 set.seed(100)
 cic.snmf.neutral <- snmf(genofile.neutral, K=4, project="new")
-#extract the probability matrice for K=4
+## extract the probability matrice for K=4
 qmatrix.neutral <- Q(cic.snmf.neutral, K=4)
 
-#plot this probability matrice 
+## plot this probability matrice 
 
 par(mfrow=c(1,1))
 par(mar=c(9, 3, 0.7, 0.7))
@@ -328,7 +329,7 @@ text(x=210,y=-0.2,cex=1.2, "France hatcheries", xpd=NA)
 
 ######################
 
-# MAP!!!
+# MAP!!! 
 
 data2<-data.frame(cbind(Pop_ID,grp$grp))
 colnames(data2)<-c("Population","group")
@@ -359,10 +360,10 @@ download.file("http://thematicmapping.org/downloads/TM_WORLD_BORDERS_SIMPL-0.3.z
 
 shape <- read.shapefile("world_shape_file/TM_WORLD_BORDERS_SIMPL-0.3")
 
-##Map NEUTRAL
+# Map NEUTRAL
 ##Format to plot the pie charts 
 ##Map limit
-#europe save 700X700
+##europe save 700X700
 basemap(xlim=c(-5,5),ylim=c(35,65),bg="white")
 map<-draw.shape(shape, col="grey85") 
 draw.pie(xyz$x, xyz$y, xyz$z, radius=1.5,
